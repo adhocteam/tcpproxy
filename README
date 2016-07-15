@@ -1,2 +1,10 @@
 A simple TCP proxy service. It listens on an address (host and port combination)
 and forwards all TCP traffic to a remote address.
+
+Installation:
+
+$ go get -u github.com/adhocteam/tcpproxy
+
+Usage:
+
+$ tcpproxy -l 0.0.0.0:29418 -r origin.server:29418
