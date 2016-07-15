@@ -9,8 +9,9 @@ import (
 
 func main() {
 	var (
-		listenAddr = flag.String("l", "", "local address to listen on")
-		remoteAddr = flag.String("r", "", "remote address to dial")
+		listenAddr     = flag.String("l", "", "local address to listen on")
+		remoteAddr     = flag.String("r", "", "remote address to dial")
+		logConnections = flag.Bool("logconn", false, "log connections")
 	)
 
 	flag.Parse()
@@ -28,17 +29,19 @@ func main() {
 		log.Fatalf("listening: %v", err)
 	}
 
-	proxy(ln, *remoteAddr)
+	proxy(ln, *remoteAddr, *logConnections)
 }
 
-func proxy(ln net.Listener, remoteAddr string) error {
+func proxy(ln net.Listener, remoteAddr string, logConnections bool) error {
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
 			return err
 		}
 
-		log.Printf("connected: %s", conn.RemoteAddr())
+		if logConnections {
+			log.Printf("connected: %s", conn.RemoteAddr())
+		}
 
 		go handle(conn, remoteAddr)
 	}
